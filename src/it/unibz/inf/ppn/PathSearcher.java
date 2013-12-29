@@ -38,7 +38,8 @@ public class PathSearcher {
 
 		while (true) {
 			try {
-				workerExecutor.awaitTermination(30, TimeUnit.SECONDS);
+				workerExecutor.awaitTermination(Long.MAX_VALUE,
+						TimeUnit.NANOSECONDS);
 				break;
 			} catch (InterruptedException e) {
 
