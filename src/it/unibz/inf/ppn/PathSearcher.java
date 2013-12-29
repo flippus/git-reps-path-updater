@@ -5,13 +5,13 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class PathSearcher {
 
 	private String pathString;
-	private List<CmdExecutorThread> threadList = new ArrayList<>();
 
 	public PathSearcher(String s) {
 		this.pathString = s;
@@ -19,24 +19,29 @@ public class PathSearcher {
 	}
 
 	private void searchPath() {
+
 		Path folder = Paths.get(pathString);
+		ExecutorService workerExecutor = Executors.newCachedThreadPool();
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
 			for (Path path : stream) {
 				if (Files.isDirectory(path)) {
-					CmdExecutorThread t = new CmdExecutorThread(path.toString());
-					t.start();
-					threadList.add(t);
+					CmdExecutorRunnable t = new CmdExecutorRunnable(
+							path.toString());
+					workerExecutor.execute(t);
 				}
 			}
 		} catch (IOException e) {
 			// ignore
 		}
 
-		for (int i = 0; i < threadList.size(); i++) {
+		workerExecutor.shutdown();
+
+		while (true) {
 			try {
-				threadList.get(i).join();
+				workerExecutor.awaitTermination(30, TimeUnit.SECONDS);
+				break;
 			} catch (InterruptedException e) {
-				i--;
+
 			}
 		}
 
