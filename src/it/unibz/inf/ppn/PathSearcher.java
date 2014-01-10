@@ -24,14 +24,14 @@ public class PathSearcher {
 		ExecutorService workerExecutor = Executors.newCachedThreadPool();
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
 			for (Path path : stream) {
-				if (Files.isDirectory(path)) {
+				if (Files.isDirectory(path) && isGitRepository(path)) {
 					CmdExecutorRunnable t = new CmdExecutorRunnable(
 							path.toString());
 					workerExecutor.execute(t);
 				}
 			}
 		} catch (IOException e) {
-			// ignore
+			System.err.println("IO Exception catched!");
 		}
 
 		workerExecutor.shutdown();
@@ -47,5 +47,20 @@ public class PathSearcher {
 		}
 
 		System.out.println("finished");
+	}
+
+	private boolean isGitRepository(Path p) {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(p)) {
+			for (Path path : stream) {
+				if (Files.isDirectory(path)) {
+					if (path.toString().endsWith(".git")) {
+						return true;
+					}
+				}
+			}
+		} catch (IOException e) {
+
+		}
+		return false;
 	}
 }
