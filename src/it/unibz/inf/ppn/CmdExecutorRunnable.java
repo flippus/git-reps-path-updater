@@ -19,7 +19,6 @@ public class CmdExecutorRunnable implements Runnable {
 			while (true) {
 				try {
 					p.waitFor();
-					System.out.println(path + " updated!");
 					break;
 				} catch (IllegalThreadStateException | InterruptedException e) {
 
