@@ -1,0 +1,29 @@
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "eclipse"
+apply plugin: "application"
+
+mainClassName = "it.unibz.inf.ppn.Main"
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+        manifest { attributes 'Main-Class': mainClassName }
+        baseName = 'gitrepoupdater'
+}
+
+run {
+    if(project.hasProperty('args')){
+        args project.args.split('\\s+')
+    }
+}
