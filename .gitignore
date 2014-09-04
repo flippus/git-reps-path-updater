@@ -11,3 +11,5 @@
 .gradle/*
 .settings/*
 build/*
+
+bin/*
