@@ -1,8 +1,3 @@
-package it.unibz.inf.ppn;
-
-import java.io.File;
-import java.io.IOException;
-
 /**
  *
  * Copyright (C) 2014 Philipp Neugebauer
@@ -22,32 +17,36 @@ import java.io.IOException;
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
+package it.unibz.inf.ppn;
+
+import java.io.File;
+import java.io.IOException;
 
 public class CmdExecutorRunnable implements Runnable {
 
-	private String path;
+    private String path;
 
-	public CmdExecutorRunnable(String p) {
-		path = p;
-	}
+    public CmdExecutorRunnable(String p) {
+        path = p;
+    }
 
-	@Override
-	public void run() {
-		try {
-			Process p = Runtime.getRuntime().exec("git pull", null,
-					new File(path));
-			while (true) {
-				try {
-					p.waitFor();
-					break;
-				} catch (IllegalThreadStateException | InterruptedException e) {
+    @Override
+    public void run() {
+        try {
+            Process p = Runtime.getRuntime().exec("git pull", null,
+                    new File(path));
+            while (true) {
+                try {
+                    p.waitFor();
+                    break;
+                } catch (IllegalThreadStateException | InterruptedException e) {
 
-				}
-			}
-			System.out.println(path + " updated!");
+                }
+            }
+            System.out.println(path + " updated!");
 
-		} catch (IOException e) {
+        } catch (IOException e) {
 
-		}
-	}
+        }
+    }
 }
