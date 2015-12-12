@@ -1,4 +1,6 @@
-### Tool to update varios Git repositories in the same folder simultanously.
+### Simultanous Update of Git Repositories
+
+This tool enbales the simultanous update of all git repositories in a specific folder through the usage of the `Executor` framework. First, it searches for all sub folders and then checks if the folders contain git repositories. In summary, the program allows the time reduction through automation and concurrency.
 
 #### Usage
 
